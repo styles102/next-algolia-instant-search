@@ -1,8 +1,10 @@
 import type { NextPage } from 'next'
 import algoliasearch from 'algoliasearch/lite';
-import { 
+import Image from 'next/image';
+import {
   InstantSearch, 
-  SearchBox, 
+  SearchBox,
+  HitsProps,
   Hits, 
   Highlight,
   RefinementList,
@@ -17,18 +19,18 @@ function Hit({ hit }: any) {
     <article>
       <h1>
         <Highlight 
-          attribute="post_title"
+          attribute="name"
           hit={hit}  
         />
       </h1>
+      <Image
+        src={hit.image}
+        width={81}
+        height={160}
+      />
       <p>{hit.categories[0]}</p>
-      <p>{hit.post_date_formatted}</p>
-      <p>
-        <Highlight
-          attribute="content"
-          hit={hit}
-        />
-      </p>
+      <p>&pound;{hit.price}</p>
+      <p>{hit.description}</p>
     </article>
   );
 }
@@ -39,8 +41,12 @@ const Search: NextPage = () => {
       <InstantSearch searchClient={searchClient} indexName={process.env.ALGOLIA_SEARCH_INDEX || ""}>
         <Configure hitsPerPage={5} />
         <SearchBox />
-        <RefinementList attribute="categories" operator="and" sortBy={["name", "count:desc"]} />
-        <Hits hitComponent={Hit} />
+        <RefinementList attribute="brand" operator="or" sortBy={["name", "count:desc"]} />
+        <RefinementList attribute="categories" operator="or" sortBy={["name", "count:desc"]} />
+        <Hits 
+          classNames={{ item: 'hit-item' }}
+          hitComponent={Hit} 
+        />
         <Pagination />
       </InstantSearch>
     </>
