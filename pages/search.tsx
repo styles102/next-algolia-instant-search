@@ -39,7 +39,7 @@ const Search: NextPage = () => {
       <InstantSearch searchClient={searchClient} indexName={process.env.ALGOLIA_SEARCH_INDEX || ""}>
         <Configure hitsPerPage={5} />
         <SearchBox />
-        <RefinementList attribute="categories" operator="and" />
+        <RefinementList attribute="categories" operator="and" sortBy={["name", "count:desc"]} />
         <Hits hitComponent={Hit} />
         <Pagination />
       </InstantSearch>
