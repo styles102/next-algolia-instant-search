@@ -1,16 +1,31 @@
 import type { NextPage } from 'next'
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-hooks-web';
+import { 
+  InstantSearch, 
+  SearchBox, 
+  Hits, 
+  Highlight
+} from 'react-instantsearch-hooks-web';
 
 const searchClient = algoliasearch(process.env.ALGOLIA_APPLICATION_ID || "", process.env.ALGOLIA_SEARCH_API_KEY || "");
 
 function Hit({ hit }: any) {
   return (
     <article>
-      <h1>{hit.post_title}</h1>
+      <h1>
+        <Highlight 
+          attribute="post_title"
+          hit={hit}  
+        />
+      </h1>
       <p>{hit.categories[0]}</p>
       <p>{hit.post_date_formatted}</p>
-      <p>{hit.content}</p>
+      <p>
+        <Highlight
+          attribute="content"
+          hit={hit}
+        />
+      </p>
     </article>
   );
 }
