@@ -4,7 +4,10 @@ import {
   InstantSearch, 
   SearchBox, 
   Hits, 
-  Highlight
+  Highlight,
+  RefinementList,
+  Pagination,
+  Configure,
 } from 'react-instantsearch-hooks-web';
 
 const searchClient = algoliasearch(process.env.ALGOLIA_APPLICATION_ID || "", process.env.ALGOLIA_SEARCH_API_KEY || "");
@@ -34,8 +37,11 @@ const Search: NextPage = () => {
   return (
     <>
       <InstantSearch searchClient={searchClient} indexName={process.env.ALGOLIA_SEARCH_INDEX || ""}>
+        <Configure hitsPerPage={5} />
         <SearchBox />
+        <RefinementList attribute="categories" operator="and" />
         <Hits hitComponent={Hit} />
+        <Pagination />
       </InstantSearch>
     </>
   )
